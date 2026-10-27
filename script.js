@@ -65,7 +65,6 @@ function testarConexaoFirebase() {
     });
 }
 
-// Tenta conectar
 testarConexaoFirebase();
 
 // ============================================================
@@ -257,7 +256,7 @@ function processarDado(linha) {
 }
 
 // ============================================================
-// LEITURA SERIAL (SEM RECONEXÃO AUTOMÁTICA)
+// LEITURA SERIAL
 // ============================================================
 async function lerDados(readerObj) {
   try {
@@ -285,7 +284,7 @@ async function lerDados(readerObj) {
 }
 
 // ============================================================
-// CONEXAO SERIAL (SEM RECONEXÃO AUTOMÁTICA)
+// CONEXAO SERIAL
 // ============================================================
 async function conectarSerial() {
   try {
@@ -298,7 +297,7 @@ async function conectarSerial() {
     port = await navigator.serial.requestPort();
     console.log('Porta selecionada, abrindo...');
     
-    await port.open({ baudRate: 9600 });
+    await port.open({ baudRate: 115200 });
     console.log('Porta aberta!');
     
     console.log('Iniciando leitura...');
@@ -436,18 +435,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (limparFirebaseBtn) {
         limparFirebaseBtn.addEventListener('click', function() {
-            if (confirm('⚠️ ATENCAO! Deseja limpar TODOS os registros do Firebase?\n\nIsso vai apagar os dados da NUVEM para TODOS os usuarios.\n\nEsta acao NAO pode ser desfeita!')) {
-                if (confirm('🔄 ULTIMA CHANCE! Deseja realmente apagar TODOS os registros do banco de dados?\n\nIsso afeta todos os usuarios do sistema.')) {
+            if (confirm('ATENCAO! Deseja limpar TODOS os registros do Firebase?\n\nIsso vai apagar os dados da NUVEM para TODOS os usuarios.\n\nEsta acao NAO pode ser desfeita!')) {
+                if (confirm('ULTIMA CHANCE! Deseja realmente apagar TODOS os registros do banco de dados?\n\nIsso afeta todos os usuarios do sistema.')) {
                     var confirmacao = prompt('Digite "SIM" para confirmar a exclusao de todos os registros:');
                     if (confirmacao === 'SIM') {
                         try {
                             const url = FIREBASE_URL + '/registros.json';
                             
-                            console.log('🗑️ Apagando todos os registros do Firebase...');
+                            console.log('Apagando todos os registros do Firebase...');
                             
                             const btn = limparFirebaseBtn;
                             const originalText = btn.innerHTML;
-                            btn.innerHTML = '⏳ Apagando...';
+                            btn.innerHTML = 'Apagando...';
                             btn.disabled = true;
                             
                             fetch(url, {
@@ -459,24 +458,24 @@ document.addEventListener('DOMContentLoaded', function() {
                                 return response.json();
                             })
                             .then(function(data) {
-                                console.log('✅ Banco de dados limpo com sucesso!');
-                                alert('✅ Todos os registros foram removidos do Firebase!');
+                                console.log('Banco de dados limpo com sucesso!');
+                                alert('Todos os registros foram removidos do Firebase!');
                                 localStorage.removeItem('rfid_dashboard');
                                 location.reload();
                             })
                             .catch(function(err) {
-                                console.error('❌ Erro ao limpar Firebase:', err);
-                                alert('❌ Erro ao limpar o banco de dados: ' + err.message);
+                                console.error('Erro ao limpar Firebase:', err);
+                                alert('Erro ao limpar o banco de dados: ' + err.message);
                                 btn.innerHTML = originalText;
                                 btn.disabled = false;
                             });
                             
                         } catch (e) {
-                            console.error('❌ Erro:', e);
-                            alert('❌ Erro ao limpar banco: ' + e.message);
+                            console.error('Erro:', e);
+                            alert('Erro ao limpar banco: ' + e.message);
                         }
                     } else {
-                        alert('❌ Confirmacao cancelada. Digite "SIM" para confirmar.');
+                        alert('Confirmacao cancelada. Digite "SIM" para confirmar.');
                     }
                 }
             }
